@@ -69,7 +69,23 @@ function loadJobList() {
       <button onclick="toggleDetails(${index})">Voir les détails</button>
       <div class="details hidden" id="details-${index}">
         <p>${job.description}</p>
-        <button onclick="openForm('${job.title}')">Candidater</button>
+        <button onclick="toggleApplyForm(${index})">Candidater</button>
+        <div id="applyForm-${index}" class="applyForm hidden">
+          <h4>Formulaire de Candidature</h4>
+          <form id="form-${index}">
+            <label for="applicantName">Nom :</label>
+            <input type="text" id="applicantName" required />
+
+            <label for="applicantEmail">Email :</label>
+            <input type="email" id="applicantEmail" required />
+
+            <label for="coverLetter">Lettre de motivation :</label>
+            <textarea id="coverLetter" required></textarea>
+
+            <button type="submit">Envoyer la Candidature</button>
+            <button type="button" onclick="toggleApplyForm(${index})">Annuler</button>
+          </form>
+        </div>
       </div>
     `;
 
@@ -83,28 +99,19 @@ function toggleDetails(index) {
   details.classList.toggle("hidden");
 }
 
-// Fonction pour afficher le formulaire de candidature
-function openForm(jobTitle) {
-  const formContainer = document.getElementById("applyFormContainer");
-  formContainer.classList.remove("hidden");
+// Fonction pour afficher/masquer le formulaire de candidature
+function toggleApplyForm(index) {
+  const applyForm = document.getElementById(`applyForm-${index}`);
+  applyForm.classList.toggle("hidden");
 
-  // Affiche le titre du job dans le formulaire
-  const formTitle = document.getElementById("applyFormTitle");
-  formTitle.textContent = `Candidature pour le poste de ${jobTitle}`;
+  // Écouteur pour la soumission du formulaire de candidature
+  const form = document.getElementById(`form-${index}`);
+  form.onsubmit = function (e) {
+    e.preventDefault();
+    alert("Candidature envoyée avec succès !");
+    toggleApplyForm(index); // Ferme le formulaire après soumission
+  };
 }
-
-// Fonction pour fermer le formulaire de candidature
-function closeForm() {
-  const formContainer = document.getElementById("applyFormContainer");
-  formContainer.classList.add("hidden");
-}
-
-// Écouteur pour la soumission du formulaire de candidature
-document.getElementById("applyForm").addEventListener("submit", (e) => {
-  e.preventDefault();
-  alert("Candidature envoyée avec succès !");
-  closeForm();
-});
 
 // Charger les annonces au démarrage
 window.onload = loadJobList;

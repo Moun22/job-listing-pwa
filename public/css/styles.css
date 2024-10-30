@@ -49,14 +49,78 @@ button:hover {
 }
 
 /* Formulaire de candidature */
-#applyFormContainer {
-  display: none;
-  background: #ffffff;
-  padding: 20px;
+.applyForm {
+  background-color: #ffffff;
+  border: 1px solid #e1e4e8;
   border-radius: 5px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-top: 15px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.hidden {
-  display: none;
+.applyForm h4 {
+  color: #0073b1;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+/* Styles des champs du formulaire */
+.applyForm label {
+  display: block;
+  margin: 10px 0 5px;
+  font-weight: bold;
+}
+
+.applyForm input[type="text"],
+.applyForm input[type="email"],
+.applyForm textarea {
+  width: 100%;
+  /* Prend toute la largeur */
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  box-sizing: border-box;
+  /* Inclut le padding et la bordure dans la largeur */
+}
+
+.applyForm input[type="text"]:focus,
+.applyForm input[type="email"]:focus,
+.applyForm textarea:focus {
+  border-color: #0073b1;
+  /* Changement de couleur lors du focus */
+  outline: none;
+  /* Retire le contour par défaut */
+}
+
+/* Styles pour le bouton du formulaire */
+.applyForm button[type="submit"],
+.applyForm button[type="button"] {
+  background-color: #0073b1;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  margin-top: 10px;
+  /* Ajoute un peu d'espace au-dessus des boutons */
+  width: 100%;
+  /* Les boutons prennent toute la largeur */
+}
+
+.applyForm button[type="submit"]:hover,
+.applyForm button[type="button"]:hover {
+  background-color: #005985;
+  /* Couleur au survol */
+}
+
+/* Style de la croix de fermeture dans le modal */
+.close {
+  float: right;
+  font-size: 24px;
+  color: #aaa;
+  cursor: pointer;
+}
+
+.close:hover {
+  color: black;
 }
