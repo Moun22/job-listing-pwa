@@ -1,13 +1,13 @@
 {
-  "name": "Calculatrice PWA",
-  "short_name": "CalcPWA",
+  "name": "Job's App PWA",
+  "short_name": "JobPWA",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#317EFB",
   "icons": [
     {
-      "src": "img/calculatrice.ico",
+      "src": "img/logo.ico",
       "sizes": "192x192",
       "type": "image/png"
     }

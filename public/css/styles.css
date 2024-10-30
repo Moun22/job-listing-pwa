@@ -1,134 +1,116 @@
+/* style.css */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
 body {
-  background-color: #ffe6f0;
-  /* Fond rose pâle */
-  font-family: "Roboto", sans-serif;
-  height: 100vh;
-  /* S'assurer que le corps prend toute la hauteur de l'écran */
   display: flex;
   justify-content: center;
   align-items: center;
+  min-height: 100vh;
+  background-color: #f9f9f9;
 }
 
 .container {
+  width: 100%;
+  max-width: 600px;
+  background-color: #fff;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+h1 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.job-item {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.job-item h2 {
+  font-size: 18px;
+  margin-bottom: 5px;
+}
+
+.job-item button {
+  margin-top: 10px;
+  padding: 8px 12px;
+  font-size: 14px;
+  color: #fff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.job-item button:hover {
+  background-color: #0056b3;
+}
+
+.job-details {
+  display: none;
+  margin-top: 10px;
+  color: #555;
+}
+
+.hidden {
+  display: none;
+}
+
+#applyFormContainer {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
   max-width: 400px;
-  /* Largeur maximale */
-  width: 90vw;
-  /* Prendre 90% de la largeur de l'écran */
-  margin: auto;
-  padding: 2vh 0;
-  /* Espacement en haut et en bas */
+  background-color: #fff;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  z-index: 1000;
 }
 
-#ecran {
-  background-color: #ffb6c1;
-  /* Rose doux */
+#applyFormContainer h2 {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+#applyForm label {
+  font-size: 14px;
+  margin-top: 10px;
+  display: block;
+}
+
+#applyForm input,
+#applyForm textarea {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+#applyForm button {
+  margin-top: 10px;
+  padding: 8px;
+  font-size: 14px;
   color: #fff;
-  border-radius: 1rem;
-  /* Arrondi des coins */
-  font-size: 4vw;
-  /* Taille de police fluide */
-  padding: 5vh;
-  /* Espacement en pourcentage de la hauteur de la fenêtre */
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  text-align: right;
+  background-color: #28a745;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
-#memoire {
-  color: #ff69b4;
-  /* Rose vif */
-  font-weight: bold;
-  font-size: 2vw;
-  /* Taille de police fluide */
-}
-
-.row {
-  display: flex;
-  flex-wrap: wrap;
-  /* Permettre aux boutons de se déplacer sur plusieurs lignes */
-  margin: 0 -2px;
-  /* Ajuster la marge pour éviter le débordement */
-}
-
-.custom-title {
-  color: #fd3f85; /* Couleur rose mature */
-  font-weight: bolder; /* Gras */
-  font-size: 3rem; /* Taille du texte */
-  margin-bottom: 20px; /* Espacement en bas */
-}
-
-.btn {
-  border-radius: 1rem;
-  /* Arrondi des coins */
-  font-size: 2vw;
-  /* Taille de police fluide */
-  padding: 2vh 0;
-  /* Espacement en pourcentage de la hauteur de la fenêtre */
-  flex: 1 1 22%;
-  /* Permettre aux boutons de grandir et de se rétrécir */
-  margin: 2px;
-  /* Espacement entre les boutons */
-  transition: background-color 0.3s, transform 0.2s;
-  /* Ajout de la transition */
-}
-
-.btn-custom-clear {
-  background-color: #ff5c8d;
-  /* Rose vif */
-  color: #fff;
-}
-
-.btn-custom-memory,
-.btn-custom-operator {
-  background-color: #ff79bc;
-  /* Rose vif */
-  color: #fff;
-}
-
-.btn-custom-number {
-  background-color: #ffb6c1;
-  /* Rose doux */
-  color: #fff;
-}
-
-.btn:hover {
-  opacity: 0.9;
-  transform: translateY(-2px);
-  /* Légère élévation au survol */
-}
-
-.btn:active {
-  transform: translateY(0);
-  /* Réinitialiser l'élévation lors de l'activation */
-}
-
-@media (max-width: 576px) {
-  #ecran {
-    font-size: 3vw;
-    /* Ajustement de la taille de police */
-    padding: 4vh;
-    /* Ajustement de l'espacement */
-  }
-
-  .btn {
-    font-size: 2vw;
-    /* Ajustement de la taille de police */
-    padding: 2vh;
-    /* Ajustement de l'espacement */
-  }
-}
-
-@media (max-width: 375px) {
-  #ecran {
-    font-size: 2.5vw;
-    /* Réduire encore la taille de police */
-    padding: 3vh;
-    /* Ajustement de l'espacement */
-  }
-
-  .btn {
-    font-size: 1.8vw;
-    /* Réduire la taille des boutons */
-    padding: 2vh;
-    /* Ajustement de l'espacement */
-  }
+#applyForm button:hover {
+  background-color: #218838;
 }

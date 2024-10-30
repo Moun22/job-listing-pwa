@@ -1,5 +1,14 @@
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
+    if (!("Notification" in window)) {
+      console.log("This browser does not support notifications.");
+      return;
+    }
+    Notification.requestPermission().then((permission) => {
+      // On affiche ou non le bouton en fonction de la réponse
+      notificationBtn.style.display =
+        permission === "granted" ? "none" : "block";
+    });
     navigator.serviceWorker
       .register("/service-worker.js")
       .then((registration) => {
@@ -44,133 +53,73 @@ window.onload = () => {
   if (memoire !== 0) memoireElt.style.display = "initial";
 };
 
-/**
- * Cette fonction réagit au clic sur les touches
- */
-function gererTouches(event) {
-  let touche;
+// script.js
+document.addEventListener("DOMContentLoaded", () => {
+  const jobList = document.getElementById("jobList");
+  const applyFormContainer = document.getElementById("applyFormContainer");
+  const applyForm = document.getElementById("applyForm");
 
-  // On liste les touches autorisées
-  const listeTouches = [
-    "0",
-    "1",
-    "2",
-    "3",
-    "4",
-    "5",
-    "6",
-    "7",
-    "8",
-    "9",
-    "+",
-    "-",
-    "*",
-    "/",
-    ".",
-    "Enter",
-    "Escape",
+  // Liste d'annonces de jobs (exemple)
+  const jobs = [
+    {
+      title: "Développeur Web",
+      details: "Responsable du développement de sites web.",
+      id: 1,
+    },
+    {
+      title: "Designer Graphique",
+      details: "Création de designs visuels et logos.",
+      id: 2,
+    },
+    {
+      title: "Chef de Projet",
+      details: "Gestion des projets et des équipes.",
+      id: 3,
+    },
   ];
 
-  // On vérifie si on a l'évènement "keydown"
-  if (event.type === "keydown") {
-    // On compare la touche appuyée aux touches autorisées
-    if (listeTouches.includes(event.key)) {
-      // On empêche l'utilisation "par défaut" de la touche
-      event.preventDefault();
-      // On stocke la touche choisie dans la variable touche
-      touche = event.key;
-    }
-  } else {
-    touche = this.innerText;
+  // Afficher les annonces de jobs
+  jobs.forEach((job) => addJobToList(job));
+
+  // Fonction pour ajouter une annonce dans la liste
+  function addJobToList(job) {
+    const jobItem = document.createElement("div");
+    jobItem.className = "job-item";
+
+    jobItem.innerHTML = `
+      <h2>${job.title}</h2>
+      <button onclick="toggleDetails(${job.id})">Voir Détails</button>
+      <div id="details-${job.id}" class="job-details">
+        <p>${job.details}</p>
+        <button onclick="apply(${job.id})">Candidater</button>
+      </div>
+    `;
+
+    jobList.appendChild(jobItem);
   }
 
-  // On vérifie si chiffre ou .
-  if (parseFloat(touche) >= 0 || touche === ".") {
-    // A vérifier, pas plusieurs . dans la chaîne
-    // On met à jour la valeur d'affichage et on affiche sur l'écran
-    affichage =
-      affichage === "" ? touche.toString() : affichage + touche.toString();
-    ecranElt.innerText = affichage;
-  } else {
-    switch (touche) {
-      // Touche C réinitialise tout
-      case "C":
-      case "Escape":
-        precedent = 0;
-        affichage = "";
-        operation = null;
-        ecranElt.innerText = 0;
-        break;
-      // Calculs
-      case "+":
-      case "-":
-      case "*":
-      case "/":
-        // On calcule la valeur résultat de l'étape précédente
-        precedent =
-          precedent === 0
-            ? parseFloat(affichage)
-            : calculer(precedent, parseFloat(affichage), operation);
-        // On met à jour l'écran
-        ecranElt.innerText = precedent;
-        // On stocke l'opération
-        operation = touche;
-        // On réinitialise la variable d'affichage
-        affichage = "";
-        break;
-      case "=":
-      case "Enter":
-        // On calcule la valeur résultat de l'étape précédente
-        precedent =
-          precedent === 0
-            ? parseFloat(affichage)
-            : calculer(precedent, parseFloat(affichage), operation);
-        // On met à jour l'écran
-        ecranElt.innerText = precedent;
-        // On stocke le résultat dans la variable d'affichage
-        affichage = precedent;
-        // On réinitialise précédent
-        precedent = 0;
-        break;
-      // On gère la mémoire
-      case "M+":
-        // On stocke (en additionnant) à la valeur déjà en mémoire
-        localStorage.memoire = localStorage.memoire
-          ? parseFloat(localStorage.memoire) + parseFloat(affichage)
-          : parseFloat(affichage);
-        // On affiche le M
-        memoireElt.style.display = "initial";
-        break;
-      case "MC":
-        // On efface la mémoire
-        localStorage.memoire = 0;
-        // On efface le M
-        memoireElt.style.display = "none";
-        break;
-      case "MR":
-        // On récupère la valeur stockée
-        memoire = localStorage.memoire ? parseFloat(localStorage.memoire) : 0;
-        affichage = memoire;
-        ecranElt.innerText = memoire;
-        break;
-      default:
-        break;
-    }
-  }
-}
+  // Afficher ou masquer les détails d'un job
+  window.toggleDetails = function (id) {
+    const detailsElement = document.getElementById(`details-${id}`);
+    detailsElement.style.display =
+      detailsElement.style.display === "none" ? "block" : "none";
+  };
 
-/**
- * Effectue le calcul
- * @param {number} nb1
- * @param {number} nb2
- * @param {string} operation
- * @returns number
- */
-function calculer(nb1, nb2, operation) {
-  nb1 = parseFloat(nb1);
-  nb2 = parseFloat(nb2);
-  if (operation === "+") return nb1 + nb2;
-  if (operation === "-") return nb1 - nb2;
-  if (operation === "*") return nb1 * nb2;
-  if (operation === "/") return nb1 / nb2;
-}
+  // Ouvrir le formulaire de candidature
+  window.apply = function (id) {
+    applyFormContainer.classList.remove("hidden");
+  };
+
+  // Fermer le formulaire de candidature
+  window.closeForm = function () {
+    applyFormContainer.classList.add("hidden");
+  };
+
+  // Soumettre le formulaire de candidature
+  applyForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    alert("Candidature envoyée avec succès !");
+    applyForm.reset();
+    closeForm();
+  });
+});

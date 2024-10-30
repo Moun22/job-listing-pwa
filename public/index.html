@@ -1,127 +1,63 @@
 <!DOCTYPE html>
 <html lang="fr">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Calculatrice</title>
 
-    <link
-      rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-    />
-    <link rel="stylesheet" href="css/styles.css" />
-    <link rel="manifest" href="/manifest.json" />
-    <link rel="icon" href="/img/calculatrice.ico" type="image/x-icon" />
-  </head>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gestion d'Annonces de Job</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="icon" href="/img/logo.ico" type="image/x-icon" />
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+</head>
 
-  <body>
-    <main class="container text-center">
-      <h1 id="app-name" class="custom-title">Calculatrice PWA</h1>
-      <img
-        src="img/calculatrice.ico"
-        alt="Icône de la calculatrice"
-        class="mb-3"
-        style="
-          width: 150px;
-          height: 150px;
-          position: absolute;
-          top: 50px;
-          left: 80px;
-        "
-      />
+<body>
+  <div class="container">
+    <h1>Liste des Annonces de Job</h1>
+    <div id="jobList">
+      <!-- Les annonces de jobs seront ajoutées ici dynamiquement -->
+    </div>
 
-      <section class="row justify-content-center">
-        <div class="col-12 my-2">
-          <span id="ecran" class="btn btn-lg btn-block text-right">0</span>
-          <p id="memoire" class="position-absolute"></p>
-        </div>
-        <div class="col-3 py-2">
-          <span class="btn btn-custom-clear btn-lg btn-block">C</span>
-        </div>
-        <div class="col-3 py-2">
-          <span class="btn btn-custom-memory btn-lg btn-block">M+</span>
-        </div>
-        <div class="col-3 py-2">
-          <span class="btn btn-custom-memory btn-lg btn-block">MC</span>
-        </div>
-        <div class="col-3 py-2">
-          <span class="btn btn-custom-memory btn-lg btn-block">MR</span>
-        </div>
-        <div class="col-3 py-2">
-          <span class="btn btn-custom-number btn-lg btn-block">7</span>
-        </div>
-        <div class="col-3 py-2">
-          <span class="btn btn-custom-number btn-lg btn-block">8</span>
-        </div>
-        <div class="col-3 py-2">
-          <span class="btn btn-custom-number btn-lg btn-block">9</span>
-        </div>
-        <div class="col-3 py-2">
-          <span class="btn btn-custom-operator btn-lg btn-block">+</span>
-        </div>
-        <div class="col-3 py-2">
-          <span class="btn btn-custom-number btn-lg btn-block">4</span>
-        </div>
-        <div class="col-3 py-2">
-          <span class="btn btn-custom-number btn-lg btn-block">5</span>
-        </div>
-        <div class="col-3 py-2">
-          <span class="btn btn-custom-number btn-lg btn-block">6</span>
-        </div>
-        <div class="col-3 py-2">
-          <span class="btn btn-custom-operator btn-lg btn-block">-</span>
-        </div>
-        <div class="col-3 py-2">
-          <span class="btn btn-custom-number btn-lg btn-block">1</span>
-        </div>
-        <div class="col-3 py-2">
-          <span class="btn btn-custom-number btn-lg btn-block">2</span>
-        </div>
-        <div class="col-3 py-2">
-          <span class="btn btn-custom-number btn-lg btn-block">3</span>
-        </div>
-        <div class="col-3 py-2">
-          <span class="btn btn-custom-operator btn-lg btn-block">*</span>
-        </div>
-        <div class="col-3 py-2">
-          <span class="btn btn-custom-operator btn-lg btn-block">.</span>
-        </div>
-        <div class="col-3 py-2">
-          <span class="btn btn-custom-number btn-lg btn-block">0</span>
-        </div>
-        <div class="col-3 py-2">
-          <span class="btn btn-custom-operator btn-lg btn-block">=</span>
-        </div>
-        <div class="col-3 py-2">
-          <span class="btn btn-custom-operator btn-lg btn-block">/</span>
-        </div>
-      </section>
-    </main>
+    <!-- Formulaire de candidature -->
+    <div id="applyFormContainer" class="hidden">
+      <h2>Formulaire de Candidature</h2>
+      <form id="applyForm">
+        <label for="applicantName">Nom :</label>
+        <input type="text" id="applicantName" required />
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="js/scripts.js"></script>
+        <label for="applicantEmail">Email :</label>
+        <input type="email" id="applicantEmail" required />
 
-    <script>
-      if ("serviceWorker" in navigator) {
-        window.addEventListener("load", () => {
-          navigator.serviceWorker
-            .register("/service-worker.js")
-            .then((registration) => {
-              console.log(
-                "Service Worker enregistré avec succès:",
-                registration
-              );
-            })
-            .catch((error) => {
-              console.error(
-                "Échec de l'enregistrement du Service Worker:",
-                error
-              );
-            });
-        });
-      }
-    </script>
-  </body>
+        <label for="coverLetter">Lettre de motivation :</label>
+        <textarea id="coverLetter" required></textarea>
+
+        <button type="submit">Envoyer la Candidature</button>
+        <button type="button" onclick="closeForm()">Annuler</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker
+          .register("/service-worker.js")
+          .then((registration) => {
+            console.log(
+              "Service Worker enregistré avec succès:",
+              registration
+            );
+          })
+          .catch((error) => {
+            console.error(
+              "Échec de l'enregistrement du Service Worker:",
+              error
+            );
+          });
+      });
+    }
+  </script>
+</body>
 </html>
+
