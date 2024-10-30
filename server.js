@@ -1,45 +1,42 @@
 const express = require("express");
+const webpush = require("web-push");
+const bodyParser = require("body-parser");
 const path = require("path");
 
 const app = express();
 const port = 3000;
 
-// Middleware pour servir des fichiers statiques (HTML, CSS, JS, Images)
+// Configuration de VAPID
+const publicVapidKey =
+  "BD5mKbhDQU8y5KmsqwOYQnIs3yhOY7VwdNEswhMY872Xf4z8HbgWOMAKXPeXSmnTHSWOWJvSxhfxj6CMw9fQAZ0";
+const privateVapidKey = "MjvvNM4Mz0D1pUIWyRS1rAgiJAQLpLpn7cxlwKdI5G0";
+
+webpush.setVapidDetails(
+  "mailto:exemple@votre-email.com",
+  publicVapidKey,
+  privateVapidKey
+);
+
+// Middleware
 app.use(express.static(path.join(__dirname, "public")));
+app.use(bodyParser.json());
 
-// Middleware pour analyser le corps des requêtes JSON
-app.use(express.json());
+// Route d'abonnement aux notifications
+app.post("/subscribe", (req, res) => {
+  const subscription = req.body;
 
-// Stockage en mémoire pour les calculs (peut être remplacé par une base de données si besoin)
-let memoire = 0;
+  // Envoie un statut 201 pour indiquer que l'abonnement a été reçu
+  res.status(201).json({});
 
-// Route pour récupérer la mémoire
-app.get("/api/memoire", (req, res) => {
-  res.json({ memoire });
+  // Message de notification
+  const payload = JSON.stringify({ title: "Nouvelle Notification!" });
+
+  // Envoie de la notification push
+  webpush.sendNotification(subscription, payload).catch((error) => {
+    console.error("Erreur lors de l'envoi de la notification:", error);
+  });
 });
 
-// Route pour le service worker
-app.get("/service-worker.js", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "service-worker.js"));
-});
-
-// Route pour mettre à jour la mémoire
-app.post("/api/memoire", (req, res) => {
-  const { operation, value } = req.body;
-  if (operation === "add") {
-    memoire += value;
-  } else if (operation === "clear") {
-    memoire = 0;
-  }
-  res.json({ memoire });
-});
-
-// Route par défaut
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
-});
-
-// Démarrer le serveur
-app.listen(port, () => {
-  console.log(`Le serveur est en cours d'exécution à http://localhost:${port}`);
-});
+app.listen(port, () =>
+  console.log(`Server running on http://localhost:${port}`)
+);
