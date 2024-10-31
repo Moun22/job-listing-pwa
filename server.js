@@ -97,10 +97,16 @@ app.post("/subscribe", (req, res) => {
   subscriptions.forEach(element => {
     authTokens.push(element.keys.auth)
   });
+  
 
   if(!(authTokens.includes(subscription.keys.auth))){
     console.log("Souscription non enregistrée, enregistrement")
     subscriptions.push(subscription);
+    webpush
+    .sendNotification(subscription, welcomePayload, options)
+    .catch((error) => {
+      console.error("Erreur lors de l'envoi de la notification:", error);
+    });
   }
 
   if(authTokens.includes(subscription.keys.auth)){
@@ -123,12 +129,6 @@ app.post("/subscribe", (req, res) => {
   const options = {
     TTL: 24 * 60 * 60,
   };
-
-  webpush
-    .sendNotification(subscription, welcomePayload, options)
-    .catch((error) => {
-      console.error("Erreur lors de l'envoi de la notification:", error);
-    });
 
   // Envoi de notifications toutes les 10 secondes
   setInterval(() => {
