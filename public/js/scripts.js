@@ -1,6 +1,15 @@
 const publicVapidKey =
   "BD5mKbhDQU8y5KmsqwOYQnIs3yhOY7VwdNEswhMY872Xf4z8HbgWOMAKXPeXSmnTHSWOWJvSxhfxj6CMw9fQAZ0";
 
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker
+      .register("/service-worker.js")
+      .then((registration) => console.log("Service Worker enregistré"))
+      .catch((error) => console.error("Erreur SW:", error));
+  });
+}
+
 // Demande de permission pour les notifications
 Notification.requestPermission().then((permission) => {
   if (permission === "granted") {

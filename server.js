@@ -35,7 +35,11 @@ app.post("/subscribe", (req, res) => {
   res.status(201).json({});
 
   // Message de notification
-  const payload = JSON.stringify({ title: "Nouvelle Notification !" });
+  const payload = JSON.stringify({
+    title: "Nouvelle Notification!",
+    body: "Clique ici pour ouvrir l'application",
+    url: "http://localhost:3000",
+  });
 
   // Définir la TTL pour une durée de 24 heures
   const options = {
