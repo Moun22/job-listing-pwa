@@ -21,3 +21,24 @@ self.addEventListener("push", (event) => {
     icon: "/img/logo.ico",
   });
 });
+
+self.addEventListener("notificationclick", (event) => {
+  event.notification.close();
+
+  // Vérifie si l'URL est présente dans les données de notification
+  const urlToOpen = event.notification.data?.url || "http://localhost:3000";
+
+  // Ouvre l'URL spécifiée ou l'URL par défaut
+  event.waitUntil(
+    clients.matchAll({ type: "window" }).then((clientList) => {
+      for (const client of clientList) {
+        if (client.url === urlToOpen && "focus" in client) {
+          return client.focus();
+        }
+      }
+      if (clients.openWindow) {
+        return clients.openWindow(urlToOpen);
+      }
+    })
+  );
+});
