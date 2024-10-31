@@ -29,7 +29,11 @@ app.post("/subscribe", (req, res) => {
   res.status(201).json({});
 
   // Message de notification
-  const payload = JSON.stringify({ title: "Nouvelle Notification!" });
+  const payload = JSON.stringify({
+    title: "Nouvelle Notification!",
+    body: "Clique ici pour ouvrir l'application",
+    url: "http://localhost:3000",
+  });
 
   // Envoie de la notification push
   webpush.sendNotification(subscription, payload).catch((error) => {
