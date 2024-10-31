@@ -75,6 +75,18 @@ const publicVapidKey =
   "BD5mKbhDQU8y5KmsqwOYQnIs3yhOY7VwdNEswhMY872Xf4z8HbgWOMAKXPeXSmnTHSWOWJvSxhfxj6CMw9fQAZ0";
 const privateVapidKey = "MjvvNM4Mz0D1pUIWyRS1rAgiJAQLpLpn7cxlwKdI5G0";
 
+const subscriptions = [];
+
+const welcomePayload = JSON.stringify({
+  title: "Bienvenue !",
+  body: "Vous recevrez des notifications pour les nouveaux jobs!",
+  url: "http://localhost:3000",
+});
+
+const options = {
+  TTL: 24 * 60 * 60,
+};
+
 webpush.setVapidDetails(
   "mailto:exemple@votre-email.com",
   publicVapidKey,
@@ -84,8 +96,6 @@ webpush.setVapidDetails(
 app.use(express.static(path.join(__dirname, "public")));
 app.use(bodyParser.json());
 
-let subscriptions = [];
-
 // Route d'abonnement aux notifications
 app.post("/subscribe", (req, res) => {
   const subscription = req.body;
@@ -93,30 +103,35 @@ app.post("/subscribe", (req, res) => {
   const expirationDate = new Date(Date.now() + 24 * 60 * 60 * 1000);
   subscription.expirationTime = expirationDate;
 
-  subscriptions.push(subscription);
-  res.status(201).json({});
-
-  // Message de notification de bienvenue
-  const welcomePayload = JSON.stringify({
-    title: "Bienvenue !",
-    body: "Vous recevrez des notifications pour les nouveaux jobs!",
-    url: "http://localhost:3000",
+  const authTokens = [];
+  subscriptions.forEach(element => {
+    authTokens.push(element.keys.auth)
   });
+  
 
-  const options = {
-    TTL: 24 * 60 * 60,
-  };
-
-  webpush
+  if(!(authTokens.includes(subscription.keys.auth))){
+    console.log("Souscription non enregistrée, enregistrement")
+    subscriptions.push(subscription);
+    webpush
     .sendNotification(subscription, welcomePayload, options)
     .catch((error) => {
       console.error("Erreur lors de l'envoi de la notification:", error);
     });
+  }
+
+  if(authTokens.includes(subscription.keys.auth)){
+    console.log("Souscription deja enregistrée");
+  }
+
+  // console.log(subscriptions);
+  //enregistrement coté serveur de la subscription
+
+  res.status(201).json({});
 
   // Envoi de notifications toutes les 10 secondes
   setInterval(() => {
     sendJobNotification();
-  }, 20000);
+  }, 10000);
 });
 
 // Fonction pour envoyer une notification de nouveau job
@@ -144,3 +159,19 @@ function sendJobNotification() {
 app.listen(port, () =>
   console.log(`Server running on http://localhost:${port}`)
 );
+
+
+async function sendNewNotification(payload){
+  await Promise.all(subscriptions.map(async (sub) => {
+    try {
+      await webpush.sendNotification(sub, payload); // throws if not successful
+      console.log("Notif envoyée")
+    } catch (err) {
+      console.log(sub.endpoint, '->', err.message);
+      // TODO: Delete subscription (e.g. from db)
+    }
+  }));
+}
+
+setTimeout(()=> {
+  sendNewNotification('Test Notification')}, 10000)
