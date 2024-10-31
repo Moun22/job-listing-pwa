@@ -49,12 +49,12 @@ button:hover {
 }
 
 /* Formulaire candidature cachés */
-.applyForm.hidden {
+.application-form.hidden {
   display: none;
 }
 
 /* Formulaire de candidature */
-.applyForm {
+.application-form {
   background-color: #ffffff;
   border: 1px solid #e1e4e8;
   border-radius: 5px;
@@ -63,22 +63,22 @@ button:hover {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.applyForm h4 {
+.application-form h4 {
   color: #0073b1;
   margin-bottom: 15px;
   text-align: center;
 }
 
 /* Styles des champs du formulaire */
-.applyForm label {
+.application-form label {
   display: block;
   margin: 10px 0 5px;
   font-weight: bold;
 }
 
-.applyForm input[type="text"],
-.applyForm input[type="email"],
-.applyForm textarea {
+.application-form input[type="text"],
+.application-form input[type="email"],
+.application-form textarea {
   width: 100%;
   /* Prend toute la largeur */
   padding: 10px;
@@ -88,9 +88,9 @@ button:hover {
   /* Inclut le padding et la bordure dans la largeur */
 }
 
-.applyForm input[type="text"]:focus,
-.applyForm input[type="email"]:focus,
-.applyForm textarea:focus {
+.application-form input[type="text"]:focus,
+.application-form input[type="email"]:focus,
+.application-form textarea:focus {
   border-color: #0073b1;
   /* Changement de couleur lors du focus */
   outline: none;
@@ -98,8 +98,8 @@ button:hover {
 }
 
 /* Styles pour le bouton du formulaire */
-.applyForm button[type="submit"],
-.applyForm button[type="button"] {
+.application-form button[type="submit"],
+.application-form button[type="button"] {
   background-color: #0073b1;
   color: white;
   padding: 10px 15px;
@@ -112,8 +112,8 @@ button:hover {
   /* Les boutons prennent toute la largeur */
 }
 
-.applyForm button[type="submit"]:hover,
-.applyForm button[type="button"]:hover {
+.application-form button[type="submit"]:hover,
+.application-form button[type="button"]:hover {
   background-color: #005985;
   /* Couleur au survol */
 }

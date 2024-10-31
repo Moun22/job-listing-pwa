@@ -29,9 +29,6 @@ app.post("/subscribe", (req, res) => {
   const expirationDate = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 heures
   subscription.expirationTime = expirationDate;
 
-  // Afficher l'objet de souscription reçu
-
-  // Envoie un statut 201 pour indiquer que l'abonnement a été reçu
   res.status(201).json({});
 
   // Message de notification

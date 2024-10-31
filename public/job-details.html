@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Détails du Job</title>
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="icon" href="/img/logo.ico" type="image/x-icon" />
+    <style>
+      .container {
+        max-width: 600px;
+        margin: 20px auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+      }
+      .job-details {
+        margin-bottom: 20px;
+      }
+      .application-form {
+        display: none; /* Masqué par défaut */
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <h1>Détails du Job</h1>
+      <div class="job-details">
+        <h2 id="jobTitle">Titre du Job</h2>
+        <p id="jobDescription">Description du job ici.</p>
+        <p><strong>Lieu :</strong> <span id="jobLocation">Ville, Pays</span></p>
+        <p>
+          <strong>Date de publication :</strong> <span id="jobDate">Date</span>
+        </p>
+        <button id="backIndexButton">Retour</button>
+        <button id="applyButton">Candidater</button>
+      </div>
+
+      <div class="application-form" id="applicationForm">
+        <h3>Formulaire de Candidature</h3>
+        <form id="form" onsubmit="submitApplication(event)">
+          <label for="name">Nom:</label>
+          <input type="text" id="name" required />
+          <br />
+          <label for="email">Email:</label>
+          <input type="email" id="email" required />
+          <br />
+          <label for="resume">CV:</label>
+          <textarea id="resume" required></textarea>
+          <br />
+          <button type="submit">Envoyer ma candidature</button>
+          <button type="button" id="backButton">Retour</button>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      // Fonction pour récupérer les paramètres d'URL
+      function getQueryParam(param) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(param);
+      }
+
+      // Exemple de données des jobs avec dates de publication
+      const jobs = [
+        {
+          id: 1,
+          title: "Développeur Full-Stack",
+          company: "Tech Corp",
+          location: "Paris, France",
+          description: "Responsable du développement des applications web...",
+          date: "2024-10-31", // Date de publication
+        },
+        {
+          id: 2,
+          title: "Designer UI/UX",
+          company: "Creative Solutions",
+          location: "Lyon, France",
+          description:
+            "Création et optimisation des interfaces utilisateurs...",
+          date: "2024-10-30", // Date de publication
+        },
+        {
+          id: 3,
+          title: "Chef de Projet IT",
+          company: "Innovatech",
+          location: "Marseille, France",
+          description: "Gestion des projets informatiques de bout en bout...",
+          date: "2024-10-29", // Date de publication
+        },
+        {
+          id: 4,
+          title: "Data Analyst",
+          company: "DataWorks",
+          location: "Nantes, France",
+          description:
+            "Analyse et interprétation des données pour aider à la prise de décision...",
+          date: "2024-10-28", // Date de publication
+        },
+        {
+          id: 5,
+          title: "Ingénieur DevOps",
+          company: "Cloudify",
+          location: "Toulouse, France",
+          description:
+            "Mise en place des pipelines CI/CD et gestion des infrastructures cloud...",
+          date: "2024-10-27", // Date de publication
+        },
+        {
+          id: 6,
+          title: "Consultant Cybersécurité",
+          company: "SecureTech",
+          location: "Nice, France",
+          description:
+            "Évaluation et renforcement de la sécurité des systèmes d'information...",
+          date: "2024-10-26", // Date de publication
+        },
+        {
+          id: 7,
+          title: "Product Owner",
+          company: "Agile Solutions",
+          location: "Bordeaux, France",
+          description:
+            "Définition des priorités et gestion du backlog produit en collaboration avec l'équipe de développement...",
+          date: "2024-10-25", // Date de publication
+        },
+        {
+          id: 8,
+          title: "Ingénieur Machine Learning",
+          company: "AI Labs",
+          location: "Grenoble, France",
+          description:
+            "Développement et optimisation de modèles de machine learning...",
+          date: "2024-10-24", // Date de publication
+        },
+      ];
+
+      // Récupérer l'index du job depuis les paramètres d'URL
+      const jobIndex = getQueryParam("index");
+
+      // Afficher les détails du job sélectionné
+      if (jobIndex !== null && jobIndex < jobs.length) {
+        const jobData = jobs[jobIndex];
+        document.getElementById("jobTitle").innerText = jobData.title;
+        document.getElementById("jobDescription").innerText =
+          jobData.description;
+        document.getElementById("jobLocation").innerText = jobData.location;
+        document.getElementById("jobDate").innerText = jobData.date; // Affichage de la date
+
+        // Gérer l'affichage du formulaire de candidature
+        document.getElementById("applyButton").addEventListener("click", () => {
+          const form = document.getElementById("applicationForm");
+          form.style.display = "block"; // Affiche le formulaire
+        });
+
+        // Gérer le bouton "Retour"
+        document.getElementById("backButton").addEventListener("click", () => {
+          document.getElementById("applicationForm").style.display = "none"; // Masque le formulaire
+        });
+
+        // Gérer le bouton "Retour"
+        document
+          .getElementById("backIndexButton")
+          .addEventListener("click", () => {
+            window.location.href = "/";
+          });
+
+        // Soumettre le formulaire de candidature
+        function submitApplication(event) {
+          event.preventDefault(); // Empêche la soumission par défaut
+
+          const name = document.getElementById("name").value;
+          const email = document.getElementById("email").value;
+          const resume = document.getElementById("resume").value;
+
+          console.log("Candidature soumise :");
+          console.log("Nom:", name);
+          console.log("Email:", email);
+          console.log("CV:", resume);
+
+          // Réinitialiser le formulaire
+          document.getElementById("form").reset();
+          document.getElementById("applicationForm").style.display = "none"; // Masquer le formulaire
+        }
+      } else {
+        document.body.innerHTML = "<h2>Job non trouvé</h2>"; // Message d'erreur si le job n'est pas trouvé
+      }
+    </script>
+  </body>
+</html>
