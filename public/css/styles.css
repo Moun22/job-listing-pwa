@@ -48,6 +48,11 @@ button:hover {
   display: none;
 }
 
+/* Formulaire candidature cachés */
+.applyForm.hidden {
+  display: none;
+}
+
 /* Formulaire de candidature */
 .applyForm {
   background-color: #ffffff;

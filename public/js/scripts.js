@@ -119,22 +119,22 @@ function loadJobList() {
       <div class="details hidden" id="details-${index}">
         <p>${job.description}</p>
         <button onclick="toggleApplyForm(${index})">Candidater</button>
-        <div id="applyForm-${index}" class="applyForm hidden">
-          <h4>Formulaire de Candidature</h4>
-          <form id="form-${index}">
-            <label for="applicantName">Nom :</label>
-            <input type="text" id="applicantName" required />
+      </div>
+      <div id="applyForm-${index}" class="applyForm hidden">
+        <h4>Formulaire de Candidature</h4>
+        <form id="form-${index}">
+          <label for="applicantName">Nom :</label>
+          <input type="text" id="applicantName" required />
 
-            <label for="applicantEmail">Email :</label>
-            <input type="email" id="applicantEmail" required />
+          <label for="applicantEmail">Email :</label>
+          <input type="email" id="applicantEmail" required />
 
-            <label for="coverLetter">Lettre de motivation :</label>
-            <textarea id="coverLetter" required></textarea>
+          <label for="coverLetter">Lettre de motivation :</label>
+          <textarea id="coverLetter" required></textarea>
 
-            <button type="submit">Envoyer la Candidature</button>
-            <button type="button" onclick="toggleApplyForm(${index})">Annuler</button>
-          </form>
-        </div>
+          <button type="submit">Envoyer la Candidature</button>
+          <button type="button" onclick="toggleApplyForm(${index})">Annuler</button>
+        </form>
       </div>
     `;
 
