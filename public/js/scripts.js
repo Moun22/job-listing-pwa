@@ -50,16 +50,65 @@ function urlBase64ToUint8Array(base64String) {
 // Exemple d'annonces de jobs
 const jobs = [
   {
+    id: 1,
     title: "Développeur Full-Stack",
     company: "Tech Corp",
     location: "Paris, France",
     description: "Responsable du développement des applications web...",
   },
   {
+    id: 2,
     title: "Designer UI/UX",
     company: "Creative Solutions",
     location: "Lyon, France",
     description: "Création et optimisation des interfaces utilisateurs...",
+  },
+  {
+    id: 3,
+    title: "Chef de Projet IT",
+    company: "Innovatech",
+    location: "Marseille, France",
+    description: "Gestion des projets informatiques de bout en bout...",
+  },
+  {
+    id: 4,
+    title: "Data Analyst",
+    company: "DataWorks",
+    location: "Nantes, France",
+    description:
+      "Analyse et interprétation des données pour aider à la prise de décision...",
+  },
+  {
+    id: 5,
+    title: "Ingénieur DevOps",
+    company: "Cloudify",
+    location: "Toulouse, France",
+    description:
+      "Mise en place des pipelines CI/CD et gestion des infrastructures cloud...",
+  },
+  {
+    id: 6,
+    title: "Consultant Cybersécurité",
+    company: "SecureTech",
+    location: "Nice, France",
+    description:
+      "Évaluation et renforcement de la sécurité des systèmes d'information...",
+  },
+  {
+    id: 7,
+    title: "Product Owner",
+    company: "Agile Solutions",
+    location: "Bordeaux, France",
+    description:
+      "Définition des priorités et gestion du backlog produit en collaboration avec l'équipe de développement...",
+  },
+  {
+    id: 8,
+    title: "Ingénieur Machine Learning",
+    company: "AI Labs",
+    location: "Grenoble, France",
+    description:
+      "Développement et optimisation de modèles de machine learning...",
   },
 ];
 
@@ -79,22 +128,22 @@ function loadJobList() {
       <div class="details hidden" id="details-${index}">
         <p>${job.description}</p>
         <button onclick="toggleApplyForm(${index})">Candidater</button>
-        <div id="applyForm-${index}" class="applyForm hidden">
-          <h4>Formulaire de Candidature</h4>
-          <form id="form-${index}">
-            <label for="applicantName">Nom :</label>
-            <input type="text" id="applicantName" required />
+      </div>
+      <div id="applyForm-${index}" class="applyForm hidden">
+        <h4>Formulaire de Candidature</h4>
+        <form id="form-${index}">
+          <label for="applicantName">Nom :</label>
+          <input type="text" id="applicantName" required />
 
-            <label for="applicantEmail">Email :</label>
-            <input type="email" id="applicantEmail" required />
+          <label for="applicantEmail">Email :</label>
+          <input type="email" id="applicantEmail" required />
 
-            <label for="coverLetter">Lettre de motivation :</label>
-            <textarea id="coverLetter" required></textarea>
+          <label for="coverLetter">Lettre de motivation :</label>
+          <textarea id="coverLetter" required></textarea>
 
-            <button type="submit">Envoyer la Candidature</button>
-            <button type="button" onclick="toggleApplyForm(${index})">Annuler</button>
-          </form>
-        </div>
+          <button type="submit">Envoyer la Candidature</button>
+          <button type="button" onclick="toggleApplyForm(${index})">Annuler</button>
+        </form>
       </div>
     `;
 
