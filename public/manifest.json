@@ -1,13 +1,13 @@
 {
-  "name": "Job's App PWA",
-  "short_name": "JobPWA",
+  "name": "Gestion d'Annonces de Job",
+  "short_name": "JobAnnonces",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#317EFB",
+  "description": "Application pour la gestion des annonces de job",
   "icons": [
     {
-      "src": "img/logo.ico",
+      "src": "/img/logo.ico",
       "sizes": "192x192",
       "type": "image/png"
     }

@@ -1,116 +1,126 @@
-/* style.css */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: Arial, sans-serif;
-}
-
+/* Styles de base */
 body {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  background-color: #f9f9f9;
+  font-family: Arial, sans-serif;
+  background-color: #f3f6f8;
+  color: #333;
 }
 
 .container {
-  width: 100%;
-  max-width: 600px;
-  background-color: #fff;
+  max-width: 800px;
+  margin: 20px auto;
   padding: 20px;
+  background: #ffffff;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
+  border-radius: 5px;
 }
 
+/* En-tête et titre */
 h1 {
+  color: #0073b1;
   text-align: center;
-  color: #333;
-  margin-bottom: 20px;
 }
 
-.job-item {
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  padding: 10px;
-  margin-bottom: 10px;
+/* Style des annonces de jobs */
+.job {
+  padding: 15px;
+  border-bottom: 1px solid #e1e4e8;
 }
 
-.job-item h2 {
-  font-size: 18px;
-  margin-bottom: 5px;
+.job h3 {
+  color: #005985;
 }
 
-.job-item button {
-  margin-top: 10px;
-  padding: 8px 12px;
-  font-size: 14px;
-  color: #fff;
-  background-color: #007bff;
+button {
+  background-color: #0073b1;
+  color: white;
+  padding: 10px 15px;
   border: none;
-  border-radius: 4px;
+  border-radius: 3px;
   cursor: pointer;
 }
 
-.job-item button:hover {
-  background-color: #0056b3;
+button:hover {
+  background-color: #005985;
 }
 
-.job-details {
-  display: none;
-  margin-top: 10px;
-  color: #555;
-}
-
-.hidden {
+/* Détails cachés */
+.details.hidden {
   display: none;
 }
 
-#applyFormContainer {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 100%;
-  max-width: 400px;
-  background-color: #fff;
+/* Formulaire de candidature */
+.applyForm {
+  background-color: #ffffff;
+  border: 1px solid #e1e4e8;
+  border-radius: 5px;
   padding: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  border-radius: 8px;
-  z-index: 1000;
+  margin-top: 15px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-#applyFormContainer h2 {
+.applyForm h4 {
+  color: #0073b1;
+  margin-bottom: 15px;
   text-align: center;
-  margin-bottom: 10px;
 }
 
-#applyForm label {
-  font-size: 14px;
-  margin-top: 10px;
+/* Styles des champs du formulaire */
+.applyForm label {
   display: block;
+  margin: 10px 0 5px;
+  font-weight: bold;
 }
 
-#applyForm input,
-#applyForm textarea {
+.applyForm input[type="text"],
+.applyForm input[type="email"],
+.applyForm textarea {
   width: 100%;
+  /* Prend toute la largeur */
   padding: 10px;
-  margin-top: 5px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  box-sizing: border-box;
+  /* Inclut le padding et la bordure dans la largeur */
 }
 
-#applyForm button {
-  margin-top: 10px;
-  padding: 8px;
-  font-size: 14px;
-  color: #fff;
-  background-color: #28a745;
+.applyForm input[type="text"]:focus,
+.applyForm input[type="email"]:focus,
+.applyForm textarea:focus {
+  border-color: #0073b1;
+  /* Changement de couleur lors du focus */
+  outline: none;
+  /* Retire le contour par défaut */
+}
+
+/* Styles pour le bouton du formulaire */
+.applyForm button[type="submit"],
+.applyForm button[type="button"] {
+  background-color: #0073b1;
+  color: white;
+  padding: 10px 15px;
   border: none;
-  border-radius: 4px;
+  border-radius: 3px;
+  cursor: pointer;
+  margin-top: 10px;
+  /* Ajoute un peu d'espace au-dessus des boutons */
+  width: 100%;
+  /* Les boutons prennent toute la largeur */
+}
+
+.applyForm button[type="submit"]:hover,
+.applyForm button[type="button"]:hover {
+  background-color: #005985;
+  /* Couleur au survol */
+}
+
+/* Style de la croix de fermeture dans le modal */
+.close {
+  float: right;
+  font-size: 24px;
+  color: #aaa;
   cursor: pointer;
 }
 
-#applyForm button:hover {
-  background-color: #218838;
+.close:hover {
+  color: black;
 }
