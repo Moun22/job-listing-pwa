@@ -124,26 +124,10 @@ function loadJobList() {
     jobElement.innerHTML = `
       <h3>${job.title}</h3>
       <p>${job.company} - ${job.location}</p>
-      <button onclick="toggleDetails(${index})">Voir les détails</button>
+      <button onclick="viewJobDetails(${index})">Voir les détails</button>
       <div class="details hidden" id="details-${index}">
         <p>${job.description}</p>
         <button onclick="toggleApplyForm(${index})">Candidater</button>
-      </div>
-      <div id="applyForm-${index}" class="applyForm hidden">
-        <h4>Formulaire de Candidature</h4>
-        <form id="form-${index}">
-          <label for="applicantName">Nom :</label>
-          <input type="text" id="applicantName" required />
-
-          <label for="applicantEmail">Email :</label>
-          <input type="email" id="applicantEmail" required />
-
-          <label for="coverLetter">Lettre de motivation :</label>
-          <textarea id="coverLetter" required></textarea>
-
-          <button type="submit">Envoyer la Candidature</button>
-          <button type="button" onclick="toggleApplyForm(${index})">Annuler</button>
-        </form>
       </div>
     `;
 
@@ -151,10 +135,8 @@ function loadJobList() {
   });
 }
 
-// Fonction pour afficher/masquer les détails d'un job
-function toggleDetails(index) {
-  const details = document.getElementById(`details-${index}`);
-  details.classList.toggle("hidden");
+function viewJobDetails(index) {
+  window.location.href = `job-details.html?index=${index}`;
 }
 
 // Fonction pour afficher/masquer le formulaire de candidature

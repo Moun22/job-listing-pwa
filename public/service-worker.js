@@ -1,7 +1,12 @@
 self.addEventListener("install", (event) => {
   event.waitUntil(
     caches.open("job-cache").then((cache) => {
-      return cache.addAll(["/", "/css/styles.css", "/js/scripts.js"]);
+      return cache.addAll([
+        "/",
+        "/css/styles.css",
+        "/js/scripts.js",
+        "/img/logo.ico",
+      ]);
     })
   );
 });
@@ -9,26 +14,37 @@ self.addEventListener("install", (event) => {
 self.addEventListener("fetch", (event) => {
   event.respondWith(
     caches.match(event.request).then((response) => {
-      return response || fetch(event.request);
+      return (
+        response ||
+        fetch(event.request).then((fetchResponse) => {
+          return caches.open("job-cache").then((cache) => {
+            cache.put(event.request, fetchResponse.clone());
+            return fetchResponse;
+          });
+        })
+      );
     })
   );
 });
 
 self.addEventListener("push", (event) => {
   const data = event.data.json();
-  self.registration.showNotification(data.title, {
+  const options = {
     body: data.body,
     icon: "/img/logo.ico",
-  });
+    data: {
+      url: data.url, // Ajout de l'URL dans les données de notification
+    },
+  };
+
+  event.waitUntil(self.registration.showNotification(data.title, options));
 });
 
 self.addEventListener("notificationclick", (event) => {
   event.notification.close();
 
-  // Vérifie si l'URL est présente dans les données de notification
   const urlToOpen = event.notification.data?.url || "http://localhost:3000";
 
-  // Ouvre l'URL spécifiée ou l'URL par défaut
   event.waitUntil(
     clients.matchAll({ type: "window" }).then((clientList) => {
       for (const client of clientList) {

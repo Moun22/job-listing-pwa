@@ -1,23 +1,81 @@
 <!DOCTYPE html>
 <html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gestion d'Annonces de Job</title>
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="icon" href="/img/logo.ico" type="image/x-icon" />
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Gestion d'Annonces de Job</title>
-  <link rel="stylesheet" href="css/styles.css" />
-  <link rel="manifest" href="/manifest.json" />
-  <link rel="icon" href="/img/logo.ico" type="image/x-icon" />
-</head>
-
-<body>
-  <div class="container">
-    <h1>Liste des Annonces de Job</h1>
-    <div id="jobList">
-      <!-- Les annonces de jobs seront ajoutées ici dynamiquement -->
+  <body>
+    <div class="container">
+      <h1>Liste des Annonces de Job</h1>
+      <div id="jobList">
+        <!-- Les annonces de jobs seront ajoutées ici dynamiquement -->
+      </div>
     </div>
-  </div>
 
-  <script src="js/scripts.js"></script>
-</body>
+    <script src="js/scripts.js"></script>
+    <script>
+      // Vérifie si le service worker est supporté
+      if ("serviceWorker" in navigator && "PushManager" in window) {
+        navigator.serviceWorker
+          .register("/service-worker.js")
+          .then(function (registration) {
+            console.log("Service Worker enregistré avec succès:", registration);
+            // Demander l'autorisation pour les notifications
+            return Notification.requestPermission()
+              .then(function (permission) {
+                if (permission === "granted") {
+                  // Si l'utilisateur a donné l'autorisation, abonnez-le aux notifications
+                  return registration.pushManager.subscribe({
+                    userVisibleOnly: true,
+                    applicationServerKey:
+                      "BD5mKbhDQU8y5KmsqwOYQnIs3yhOY7VwdNEswhMY872Xf4z8HbgWOMAKXPeXSmnTHSWOWJvSxhfxj6CMw9fQAZ0",
+                  });
+                } else {
+                  console.error(
+                    "Permission pour les notifications non accordée."
+                  );
+                }
+              })
+              .then(function (subscription) {
+                // Envoie l'abonnement au serveur
+                fetch("/subscribe", {
+                  method: "POST",
+                  body: JSON.stringify(subscription),
+                  headers: {
+                    "Content-Type": "application/json",
+                    "x-welcome-notification-sent": localStorage.getItem(
+                      "welcomeNotificationSent"
+                    )
+                      ? "true"
+                      : "false",
+                  },
+                })
+                  .then((response) => {
+                    if (!response.ok) {
+                      throw new Error("Erreur lors de l'abonnement");
+                    }
+                    // Marquer la notification comme envoyée
+                    localStorage.setItem("welcomeNotificationSent", "true");
+                  })
+                  .catch((error) =>
+                    console.error("Erreur lors de l'abonnement:", error)
+                  );
+              });
+          })
+          .catch(function (error) {
+            console.error(
+              "Échec de l'enregistrement du Service Worker:",
+              error
+            );
+          });
+      } else {
+        console.error("Service Worker ou Push Notifications non supportés.");
+      }
+    </script>
+  </body>
 </html>
