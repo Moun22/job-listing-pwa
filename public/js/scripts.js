@@ -1,16 +1,14 @@
-const publicVapidKey =
-  "BGrOoLtWECWBQCCoeKjLLoL-1RVLkrJJ00pV_02629NycueUevsptijCp8F-m_GZMy6I3ZF-Tc4TO-mXdtX1irY";
+const publicVapidKey = "BGrOoLtWECWBQCCoeKjLLoL-1RVLkrJJ00pV_02629NycueUevsptijCp8F-m_GZMy6I3ZF-Tc4TO-mXdtX1irY";
 
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
     navigator.serviceWorker
-      .register("/service-worker.js")
-      .then((registration) => console.log("Service Worker enregistré"))
-      .catch((error) => console.error("Erreur SW:", error));
+        .register("/service-worker.js")
+        .then((registration) => console.log("Service Worker registered"))
+        .catch((error) => console.error("Service Worker registration failed:", error));
   });
 }
 
-// Demande de permission pour les notifications
 Notification.requestPermission().then((permission) => {
   if (permission === "granted") {
     subscribeUserToPush();
@@ -20,30 +18,34 @@ Notification.requestPermission().then((permission) => {
 function showNotification() {
   if (Notification.permission === "granted") {
     const options = {
-      body: "Candidature envoyée avec succès !",
-      icon: "/path/to/check-icon.png", // Remplacez par le chemin de votre icône de check vert
+      body: "Application submitted successfully!",
+      icon: "/path/to/check-icon.png",
     };
     new Notification("Notification", options);
   }
 }
 
 async function subscribeUserToPush() {
-  const registration = await navigator.serviceWorker.ready;
-  const applicationServerKey = urlBase64ToUint8Array(publicVapidKey);
-  const subscription = await registration.pushManager.subscribe({
-    userVisibleOnly: true,
-    applicationServerKey: applicationServerKey,
-  });
+  try {
+    const registration = await navigator.serviceWorker.ready;
+    const applicationServerKey = urlBase64ToUint8Array(publicVapidKey);
+    const subscription = await registration.pushManager.subscribe({
+      userVisibleOnly: true,
+      applicationServerKey: applicationServerKey,
+    });
 
-  await fetch("/subscribe", {
-    method: "POST",
-    body: JSON.stringify(subscription),
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
+    await fetch("/subscribe", {
+      method: "POST",
+      body: JSON.stringify(subscription),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
-  console.log("Utilisateur inscrit aux notifications.");
+    console.log("User subscribed to notifications.");
+  } catch (error) {
+    console.error("Failed to subscribe user:", error);
+  }
 }
 
 function urlBase64ToUint8Array(base64String) {
@@ -57,75 +59,13 @@ function urlBase64ToUint8Array(base64String) {
   return outputArray;
 }
 
-// Exemple d'annonces de jobs
 const jobs = [
-  {
-    id: 1,
-    title: "Développeur Full-Stack",
-    company: "Tech Corp",
-    location: "Paris, France",
-    description: "Responsable du développement des applications web...",
-  },
-  {
-    id: 2,
-    title: "Designer UI/UX",
-    company: "Creative Solutions",
-    location: "Lyon, France",
-    description: "Création et optimisation des interfaces utilisateurs...",
-  },
-  {
-    id: 3,
-    title: "Chef de Projet IT",
-    company: "Innovatech",
-    location: "Marseille, France",
-    description: "Gestion des projets informatiques de bout en bout...",
-  },
-  {
-    id: 4,
-    title: "Data Analyst",
-    company: "DataWorks",
-    location: "Nantes, France",
-    description:
-      "Analyse et interprétation des données pour aider à la prise de décision...",
-  },
-  {
-    id: 5,
-    title: "Ingénieur DevOps",
-    company: "Cloudify",
-    location: "Toulouse, France",
-    description:
-      "Mise en place des pipelines CI/CD et gestion des infrastructures cloud...",
-  },
-  {
-    id: 6,
-    title: "Consultant Cybersécurité",
-    company: "SecureTech",
-    location: "Nice, France",
-    description:
-      "Évaluation et renforcement de la sécurité des systèmes d'information...",
-  },
-  {
-    id: 7,
-    title: "Product Owner",
-    company: "Agile Solutions",
-    location: "Bordeaux, France",
-    description:
-      "Définition des priorités et gestion du backlog produit en collaboration avec l'équipe de développement...",
-  },
-  {
-    id: 8,
-    title: "Ingénieur Machine Learning",
-    company: "AI Labs",
-    location: "Grenoble, France",
-    description:
-      "Développement et optimisation de modèles de machine learning...",
-  },
+  // Job listings...
 ];
 
-// Fonction pour charger les annonces de job dans la page
 function loadJobList() {
   const jobList = document.getElementById("jobList");
-  jobList.innerHTML = ""; // Vide la liste
+  jobList.innerHTML = "";
 
   jobs.forEach((job, index) => {
     const jobElement = document.createElement("div");
@@ -134,10 +74,10 @@ function loadJobList() {
     jobElement.innerHTML = `
       <h3>${job.title}</h3>
       <p>${job.company} - ${job.location}</p>
-      <button onclick="viewJobDetails(${index})">Voir les détails</button>
+      <button onclick="viewJobDetails(${index})">View Details</button>
       <div class="details hidden" id="details-${index}">
         <p>${job.description}</p>
-        <button onclick="toggleApplyForm(${index})">Candidater</button>
+        <button onclick="toggleApplyForm(${index})">Apply</button>
       </div>
     `;
 
@@ -149,21 +89,17 @@ function viewJobDetails(index) {
   window.location.href = `job-details.html?index=${index}`;
 }
 
-// Fonction pour afficher/masquer le formulaire de candidature
 function toggleApplyForm(index) {
   const applyForm = document.getElementById(`applyForm-${index}`);
   applyForm.classList.toggle("hidden");
 
-  // Écouteur pour la soumission du formulaire de candidature
   const form = document.getElementById(`form-${index}`);
   form.onsubmit = function (e) {
     e.preventDefault();
-    alert("Candidature envoyée avec succès !");
-    showNotification(); // Affiche la notification
-    toggleApplyForm(index); // Ferme le formulaire après soumission
+    alert("Application submitted successfully!");
+    showNotification();
+    toggleApplyForm(index);
   };
 }
 
-// Charger les annonces au démarrage
 window.onload = loadJobList;
-
