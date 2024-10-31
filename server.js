@@ -77,6 +77,16 @@ const privateVapidKey = "MjvvNM4Mz0D1pUIWyRS1rAgiJAQLpLpn7cxlwKdI5G0";
 
 const subscriptions = [];
 
+const welcomePayload = JSON.stringify({
+  title: "Bienvenue !",
+  body: "Vous recevrez des notifications pour les nouveaux jobs!",
+  url: "http://localhost:3000",
+});
+
+const options = {
+  TTL: 24 * 60 * 60,
+};
+
 webpush.setVapidDetails(
   "mailto:exemple@votre-email.com",
   publicVapidKey,
@@ -116,19 +126,7 @@ app.post("/subscribe", (req, res) => {
   // console.log(subscriptions);
   //enregistrement coté serveur de la subscription
 
-  subscriptions.push(subscription);
   res.status(201).json({});
-
-  // Message de notification de bienvenue
-  const welcomePayload = JSON.stringify({
-    title: "Bienvenue !",
-    body: "Vous recevrez des notifications pour les nouveaux jobs!",
-    url: "http://localhost:3000",
-  });
-
-  const options = {
-    TTL: 24 * 60 * 60,
-  };
 
   // Envoi de notifications toutes les 10 secondes
   setInterval(() => {
