@@ -167,7 +167,6 @@
             window.location.href = "/";
           });
 
-        // Soumettre le formulaire de candidature
         function submitApplication(event) {
           event.preventDefault(); // Empêche la soumission par défaut
 
@@ -179,6 +178,24 @@
           console.log("Nom:", name);
           console.log("Email:", email);
           console.log("CV:", resume);
+
+          // Afficher une notification de confirmation
+          if (Notification.permission === "granted") {
+            new Notification("Candidature Soumise!", {
+              body: "Votre candidature a bien été prise en compte.",
+              icon: "/img/logo.ico", // Remplacez par le chemin de votre icône
+            });
+          } else if (Notification.permission !== "denied") {
+            // Demande de permission pour les notifications
+            Notification.requestPermission().then((permission) => {
+              if (permission === "granted") {
+                new Notification("Candidature Soumise!", {
+                  body: "Votre candidature a bien été prise en compte.",
+                  icon: "/img/logo.ico",
+                });
+              }
+            });
+          }
 
           // Réinitialiser le formulaire
           document.getElementById("form").reset();

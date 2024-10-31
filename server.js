@@ -116,7 +116,7 @@ app.post("/subscribe", (req, res) => {
   // Envoi de notifications toutes les 10 secondes
   setInterval(() => {
     sendJobNotification();
-  }, 10000);
+  }, 20000);
 });
 
 // Fonction pour envoyer une notification de nouveau job
