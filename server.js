@@ -8,8 +8,8 @@ const port = 3000;
 
 // Configuration de VAPID
 const publicVapidKey =
-  "BD5mKbhDQU8y5KmsqwOYQnIs3yhOY7VwdNEswhMY872Xf4z8HbgWOMAKXPeXSmnTHSWOWJvSxhfxj6CMw9fQAZ0";
-const privateVapidKey = "MjvvNM4Mz0D1pUIWyRS1rAgiJAQLpLpn7cxlwKdI5G0";
+  "BGrOoLtWECWBQCCoeKjLLoL-1RVLkrJJ00pV_02629NycueUevsptijCp8F-m_GZMy6I3ZF-Tc4TO-mXdtX1irY";
+const privateVapidKey = "Q4fYZO2R0VCCLs9x53n52HHH5qo_Bvu10ZLki6PPY0g";
 
 // Remplacez `audience` par une adresse `mailto:`
 webpush.setVapidDetails(

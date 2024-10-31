@@ -1,5 +1,5 @@
 const publicVapidKey =
-  "BD5mKbhDQU8y5KmsqwOYQnIs3yhOY7VwdNEswhMY872Xf4z8HbgWOMAKXPeXSmnTHSWOWJvSxhfxj6CMw9fQAZ0";
+  "BGrOoLtWECWBQCCoeKjLLoL-1RVLkrJJ00pV_02629NycueUevsptijCp8F-m_GZMy6I3ZF-Tc4TO-mXdtX1irY";
 
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
@@ -16,6 +16,16 @@ Notification.requestPermission().then((permission) => {
     subscribeUserToPush();
   }
 });
+
+function showNotification() {
+  if (Notification.permission === "granted") {
+    const options = {
+      body: "Candidature envoyée avec succès !",
+      icon: "/path/to/check-icon.png", // Remplacez par le chemin de votre icône de check vert
+    };
+    new Notification("Notification", options);
+  }
+}
 
 async function subscribeUserToPush() {
   const registration = await navigator.serviceWorker.ready;
@@ -37,7 +47,7 @@ async function subscribeUserToPush() {
 }
 
 function urlBase64ToUint8Array(base64String) {
-  const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
+  const padding = "=".repeat((4 - base64String.length % 4) % 4);
   const base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
   const rawData = window.atob(base64);
   const outputArray = new Uint8Array(rawData.length);
@@ -149,9 +159,11 @@ function toggleApplyForm(index) {
   form.onsubmit = function (e) {
     e.preventDefault();
     alert("Candidature envoyée avec succès !");
+    showNotification(); // Affiche la notification
     toggleApplyForm(index); // Ferme le formulaire après soumission
   };
 }
 
 // Charger les annonces au démarrage
 window.onload = loadJobList;
+
