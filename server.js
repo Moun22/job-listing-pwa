@@ -133,7 +133,7 @@ app.post("/subscribe", (req, res) => {
   // Envoi de notifications toutes les 10 secondes
   setInterval(() => {
     sendJobNotification();
-  }, 20000);
+  }, 10000);
 });
 
 // Fonction pour envoyer une notification de nouveau job
