@@ -1,45 +1,31 @@
-const express = require("express");
-const path = require("path");
+const express = require('express');
+const webpush = require('web-push');
+const bodyParser = require('body-parser');
+const path = require('path');
 
 const app = express();
-const port = 3000;
+app.use(bodyParser.json());
+app.use(express.static(path.join(__dirname, 'public')));
 
-// Middleware pour servir des fichiers statiques (HTML, CSS, JS, Images)
-app.use(express.static(path.join(__dirname, "public")));
+// Clés VAPID
+const publicVapidKey = 'BHHzzuDIb1aXvuwYv4kKLZ0xUAmhPCL9TY5FFBVyXDfGtiOEK8japyHgBUYmrt6I1GvsIehjfq9OgW28SxiwV8o';
+const privateVapidKey = 'uUYhA7YQD74EOpoCcEPUJ9NVSprMFfhMG4fW-QfzU_0';
 
-// Middleware pour analyser le corps des requêtes JSON
-app.use(express.json());
+webpush.setVapidDetails('mailto:example@example.com', publicVapidKey, privateVapidKey);
 
-// Stockage en mémoire pour les calculs (peut être remplacé par une base de données si besoin)
-let memoire = 0;
+// Route pour gérer les abonnements
+app.post('/subscribe', (req, res) => {
+  const subscription = req.body;
+  res.status(201).json({});
 
-// Route pour récupérer la mémoire
-app.get("/api/memoire", (req, res) => {
-  res.json({ memoire });
-});
+  const payload = JSON.stringify({
+    title: 'Nouvelle Offre d’Emploi!',
+    body: 'Une nouvelle offre d’emploi est disponible. Consultez-la maintenant !'
+  });
 
-// Route pour le service worker
-app.get("/service-worker.js", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "service-worker.js"));
-});
-
-// Route pour mettre à jour la mémoire
-app.post("/api/memoire", (req, res) => {
-  const { operation, value } = req.body;
-  if (operation === "add") {
-    memoire += value;
-  } else if (operation === "clear") {
-    memoire = 0;
-  }
-  res.json({ memoire });
-});
-
-// Route par défaut
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
+  webpush.sendNotification(subscription, payload).catch(error => console.error(error));
 });
 
 // Démarrer le serveur
-app.listen(port, () => {
-  console.log(`Le serveur est en cours d'exécution à http://localhost:${port}`);
-});
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`Serveur démarré sur le port ${PORT}`));

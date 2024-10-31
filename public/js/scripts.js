@@ -1,125 +1,56 @@
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    if (!("Notification" in window)) {
-      console.log("This browser does not support notifications.");
-      return;
-    }
-    Notification.requestPermission().then((permission) => {
-      // On affiche ou non le bouton en fonction de la réponse
-      notificationBtn.style.display =
-        permission === "granted" ? "none" : "block";
-    });
-    navigator.serviceWorker
-      .register("/service-worker.js")
-      .then((registration) => {
-        console.log("Service Worker enregistré avec succès:", registration);
-      })
-      .catch((error) => {
-        console.error("Échec de l'enregistrement du Service Worker:", error);
-      });
-  });
+// Ajouter une annonce de job dynamiquement dans la liste
+function addJobToList(title, description) {
+    const jobList = document.getElementById('jobList');
+    const jobItem = document.createElement('div');
+    jobItem.classList.add('job-item');
+    jobItem.innerHTML = `
+    <h2>${title}</h2>
+    <p>${description}</p>
+    <button onclick="openApplyForm()">Postuler</button>
+  `;
+    jobList.appendChild(jobItem);
 }
 
-// Variables globales
-// Eléments mémoire et écran
-const memoireElt = document.querySelector("#memoire");
-const ecranElt = document.querySelector("#ecran");
+// Exemple d'ajout de job
+addJobToList('Développeur Web', 'Nous recherchons un développeur web qualifié.');
 
-// On stocke la valeur de l'écran "précédent"
-let precedent = 0;
+// Ouvrir et fermer le formulaire de candidature
+function openApplyForm() {
+    document.getElementById('applyFormContainer').classList.remove('hidden');
+}
 
-// On stocke l'affichage
-let affichage = "";
+function closeForm() {
+    document.getElementById('applyFormContainer').classList.add('hidden');
+}
 
-// On stocke l'opération
-let operation = null;
+// Gestion de l'abonnement aux notifications push
+async function subscribeToPush() {
+    try {
+        const registration = await navigator.serviceWorker.ready;
+        const subscription = await registration.pushManager.subscribe({
+            userVisibleOnly: true,
+            applicationServerKey: 'BHHzzuDIb1aXvuwYv4kKLZ0xUAmhPCL9TY5FFBVyXDfGtiOEK8japyHgBUYmrt6I1GvsIehjfq9OgW28SxiwV8o'
+        });
 
-// On initialise la mémoire
-let memoire;
+        await fetch('/subscribe', {
+            method: 'POST',
+            body: JSON.stringify(subscription),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
 
-window.onload = () => {
-  // On écoute les clics sur les touches
-  let touches = document.querySelectorAll("span");
+        console.log('Abonnement aux notifications push réussi.');
+    } catch (error) {
+        console.error('Erreur lors de l’abonnement aux notifications push:', error);
+    }
+}
 
-  for (let touche of touches) {
-    touche.addEventListener("click", gererTouches);
-  }
-
-  // On écoute les touches du clavier
-  document.addEventListener("keydown", gererTouches);
-
-  // Récupération de la mémoire depuis le stockage local
-  memoire = localStorage.memoire ? parseFloat(localStorage.memoire) : 0;
-  if (memoire !== 0) memoireElt.style.display = "initial";
-};
-
-// script.js
-document.addEventListener("DOMContentLoaded", () => {
-  const jobList = document.getElementById("jobList");
-  const applyFormContainer = document.getElementById("applyFormContainer");
-  const applyForm = document.getElementById("applyForm");
-
-  // Liste d'annonces de jobs (exemple)
-  const jobs = [
-    {
-      title: "Développeur Web",
-      details: "Responsable du développement de sites web.",
-      id: 1,
-    },
-    {
-      title: "Designer Graphique",
-      details: "Création de designs visuels et logos.",
-      id: 2,
-    },
-    {
-      title: "Chef de Projet",
-      details: "Gestion des projets et des équipes.",
-      id: 3,
-    },
-  ];
-
-  // Afficher les annonces de jobs
-  jobs.forEach((job) => addJobToList(job));
-
-  // Fonction pour ajouter une annonce dans la liste
-  function addJobToList(job) {
-    const jobItem = document.createElement("div");
-    jobItem.className = "job-item";
-
-    jobItem.innerHTML = `
-      <h2>${job.title}</h2>
-      <button onclick="toggleDetails(${job.id})">Voir Détails</button>
-      <div id="details-${job.id}" class="job-details">
-        <p>${job.details}</p>
-        <button onclick="apply(${job.id})">Candidater</button>
-      </div>
-    `;
-
-    jobList.appendChild(jobItem);
-  }
-
-  // Afficher ou masquer les détails d'un job
-  window.toggleDetails = function (id) {
-    const detailsElement = document.getElementById(`details-${id}`);
-    detailsElement.style.display =
-      detailsElement.style.display === "none" ? "block" : "none";
-  };
-
-  // Ouvrir le formulaire de candidature
-  window.apply = function (id) {
-    applyFormContainer.classList.remove("hidden");
-  };
-
-  // Fermer le formulaire de candidature
-  window.closeForm = function () {
-    applyFormContainer.classList.add("hidden");
-  };
-
-  // Soumettre le formulaire de candidature
-  applyForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-    alert("Candidature envoyée avec succès !");
-    applyForm.reset();
-    closeForm();
-  });
+// Ajoutez un bouton pour s'abonner aux notifications
+document.addEventListener('DOMContentLoaded', () => {
+    const subscribeButton = document.createElement('button');
+    subscribeButton.innerText = 'Recevoir les alertes emploi';
+    subscribeButton.classList.add('btn', 'btn-primary', 'my-3');
+    subscribeButton.onclick = subscribeToPush;
+    document.querySelector('.container').appendChild(subscribeButton);
 });

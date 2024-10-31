@@ -1,6 +1,6 @@
 {
-  "name": "Job's App PWA",
-  "short_name": "JobPWA",
+  "name": "Gestion d'Annonces de Job",
+  "short_name": "JobApp",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",

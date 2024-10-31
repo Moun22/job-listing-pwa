@@ -1,45 +1,37 @@
-const CACHE_NAME = "job-v1";
-const urlsToCache = [
-  "/",
-  "/index.html",
-  "/css/styles.css",
-  "/js/scripts.js",
-  "/service-worker.js",
-  "https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css",
-  "/img/calculatrice.ico",
-];
-
-// Installation du service worker
-self.addEventListener("install", (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      console.log("Cache ouvert et fichiers ajoutés:", urlsToCache);
-      return cache.addAll(urlsToCache);
-    })
-  );
-});
-
-// Activation du service worker
-self.addEventListener("activate", (event) => {
-  event.waitUntil(
-    caches.keys().then((cacheNames) => {
-      return Promise.all(
-        cacheNames.map((cacheName) => {
-          if (cacheName !== CACHE_NAME) {
-            console.log("Cache supprimé:", cacheName);
-            return caches.delete(cacheName);
-          }
+self.addEventListener('install', event => {
+    event.waitUntil(
+        caches.open('job-listing-cache').then(cache => {
+            return cache.addAll([
+                '/',
+                '/index.html',
+                '/css/styles.css',
+                '/js/scripts.js',
+                '/img/logo.ico'
+            ]);
         })
-      );
-    })
-  );
+    );
+    console.log('Service Worker installé et cache créé.');
 });
 
-// Récupération des ressources depuis le cache
-self.addEventListener("fetch", (event) => {
-  event.respondWith(
-    caches.match(event.request).then((response) => {
-      return response || fetch(event.request);
-    })
-  );
+self.addEventListener('fetch', event => {
+    event.respondWith(
+        caches.match(event.request).then(response => {
+            return response || fetch(event.request).catch(error => {
+                console.error('Erreur lors de la récupération de la ressource:', error);
+                throw error;
+            });
+        })
+    );
+});
+
+
+self.addEventListener('push', event => {
+    const data = event.data.json();
+    console.log('Notification push reçue:', data); // Log pour confirmer la réception de notification
+    event.waitUntil(
+        self.registration.showNotification(data.title, {
+            body: data.body,
+            icon: '/img/logo.ico'
+        })
+    );
 });
